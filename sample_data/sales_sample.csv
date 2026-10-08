@@ -1,0 +1,21 @@
+order_id,order_date,customer_id,region,product_category,quantity,unit_price,discount_pct,revenue,profit,customer_rating,order_status,sales_rep,sales_channel,payment_method
+ORD-1001,2025-01-05,C-001,North,Electronics,2,450,5,900,180.0,4.8,Completed,Avery,Online,Credit Card
+ORD-1002,2025-01-13,C-002,South,Home,3,120,10,360,72.0,4.2,Completed,Jordan,Store,Debit Card
+ORD-1003,2025-01-22,C-003,West,Electronics,1,780,0,780,156.0,4.7,Completed,Sam,Online,Digital Wallet
+ORD-1004,2025-02-02,C-001,North,Office,5,35,8,175,52.5,4.1,Completed,Avery,Partner,Credit Card
+ORD-1005,2025-02-11,C-004,East,Home,2,210,12,420,84.0,3.9,Completed,Taylor,Store,Cash
+ORD-1006,2025-02-18,C-005,South,Electronics,1,620,5,620,124.0,4.6,Completed,Jordan,Online,Credit Card
+ORD-1007,2025-03-03,C-006,West,Office,8,22,0,176,61.6,4.3,Completed,Sam,Partner,Debit Card
+ORD-1008,2025-03-15,C-002,South,Home,1,340,10,340,68.0,4.0,Completed,Jordan,Store,Digital Wallet
+ORD-1009,2025-03-27,C-007,East,Electronics,2,390,7,780,117.0,4.5,Completed,Taylor,Online,Credit Card
+ORD-1010,2025-04-04,C-008,North,Home,4,95,5,380,76.0,4.4,Completed,Avery,Store,Cash
+ORD-1011,2025-04-17,C-009,West,Electronics,1,890,0,890,178.0,4.9,Completed,Sam,Online,Digital Wallet
+ORD-1012,2025-04-28,C-010,East,Office,10,18,15,180,54.0,3.8,Completed,Taylor,Partner,Debit Card
+ORD-1013,2025-05-06,C-003,West,Home,2,245,10,490,98.0,4.2,Completed,Sam,Online,Credit Card
+ORD-1014,2025-05-16,C-011,South,Electronics,1,710,5,710,142.0,4.7,Completed,Jordan,Store,Credit Card
+ORD-1015,2025-05-23,C-012,North,Office,6,28,0,168,50.4,4.1,Completed,Avery,Partner,Debit Card
+ORD-1016,2025-06-01,C-013,East,Home,3,155,7,465,93.0,4.3,Completed,Taylor,Online,Digital Wallet
+ORD-1017,2025-06-12,C-014,South,Electronics,1,550,8,550,110.0,4.6,Completed,Jordan,Online,Credit Card
+ORD-1018,2025-06-25,C-015,West,Office,4,42,0,168,50.4,4.0,Completed,Sam,Store,Cash
+ORD-1019,2025-06-29,C-001,North,Electronics,1,640,5,640,128.0,4.8,Completed,Avery,Online,Credit Card
+ORD-1020,2025-06-30,C-016,East,Home,2,175,10,350,70.0,4.2,Cancelled,Taylor,Store,Debit Card

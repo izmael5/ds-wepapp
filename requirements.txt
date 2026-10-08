@@ -1,0 +1,11 @@
+Flask>=3.0,<4.0
+pandas>=2.2,<4.0
+numpy>=1.26,<3.0
+openpyxl>=3.1,<4.0
+xlrd>=2.0.1,<3.0
+matplotlib>=3.8,<4.0
+reportlab>=4.0,<6.0
+gunicorn>=22,<24; platform_system != "Windows"
+# Optional: enables the random-forest profit estimator and MySQL source import.
+scikit-learn>=1.4,<2.0
+mysql-connector-python>=8.3,<10.0

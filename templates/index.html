@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8fc">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>Data Studio — Analytics Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark">D</span><span>data<span class="brand-light">studio</span></span></a>
+    <div class="side-label">WORKSPACE</div>
+    <nav class="side-nav" aria-label="Main navigation">
+      <a class="nav-item active" href="#overview"><span class="nav-icon">◫</span> Overview</a>
+      <a class="nav-item" href="#data-source"><span class="nav-icon">⇧</span> Data sources</a>
+      <a class="nav-item" href="#filters"><span class="nav-icon">⌕</span> Filters</a>
+      <a class="nav-item" href="#explore"><span class="nav-icon">⌁</span> Explore</a>
+      <a class="nav-item" href="#ml"><span class="nav-icon">↗</span> Predictions</a>
+      <a class="nav-item" href="#reports"><span class="nav-icon">▤</span> Reports</a>
+    </nav>
+    <div class="sidebar-bottom"><div class="online-dot"></div><span>Local workspace</span><span class="secure-label">PRIVATE</span></div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> Overview</div><div class="top-actions"><span class="status-indicator"><i></i> System ready</span><div class="user-chip"><span class="avatar">{{ current_user.username[:2]|upper }}</span><span>{{ current_user.username }} <small>{{ current_user.role }}</small></span></div><form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="logout-button" type="submit">Sign out</button></form></div></header>
+    <section class="page-heading" id="overview">
+      <div><div class="eyebrow">YOUR DATA, IN FOCUS</div><h1>Analytics overview</h1><p class="subtitle">Bring your data together. Discover the story behind the numbers.</p></div>
+      <button class="button button-primary" id="refreshButton"><span>↻</span> Refresh dashboard</button>
+    </section>
+
+    <section class="source-strip" id="data-source">
+      <div class="source-copy"><div class="source-icon">↥</div><div><strong>Start with your data</strong><p>Upload a file or connect to a MySQL database.</p></div></div>
+      <div class="source-actions"><a class="button button-light" href="#upload-panel">Upload a file <span>↗</span></a><button class="button button-ghost" id="mysqlToggle">Connect MySQL</button></div>
+    </section>
+
+    <section class="panel section-block filters-panel" id="filters">
+      <div class="section-heading"><div><div class="eyebrow">SLICE AND EXPLORE</div><h2>Interactive filters</h2></div><span class="data-chip" id="activeFilterSummary">All rows</span></div>
+      <div class="filter-grid" id="filterGrid"><p class="filter-empty">Load a dataset to choose category filters.</p></div>
+      <div class="filter-actions"><button class="button button-primary" id="applyFilters">Apply filters</button><button class="button button-light" id="clearFilters">Clear filters</button><span class="filter-status" id="filterStatus" role="status"></span></div>
+      <p class="drill-hint">Tip: select a bar or donut segment to drill down to that category.</p>
+    </section>
+
+    <section class="section-block" id="dashboard">
+      <div class="section-heading"><div><div class="eyebrow">AT A GLANCE</div><h2>Key metrics</h2></div><span class="data-chip" id="dataStatus">No data loaded</span></div>
+      <div class="kpi-grid" id="kpiGrid">
+        <article class="kpi-card"><div class="kpi-head"><span>Total orders</span><span class="metric-symbol">▦</span></div><div class="kpi-value">—</div><div class="kpi-note">Upload data to get started</div></article>
+        <article class="kpi-card"><div class="kpi-head"><span>Net revenue</span><span class="metric-symbol">$</span></div><div class="kpi-value">—</div><div class="kpi-note">Excludes cancelled orders</div></article>
+        <article class="kpi-card"><div class="kpi-head"><span>Total profit</span><span class="metric-symbol">↗</span></div><div class="kpi-value">—</div><div class="kpi-note">Excludes cancelled orders</div></article>
+        <article class="kpi-card"><div class="kpi-head"><span>Customers</span><span class="metric-symbol">♙</span></div><div class="kpi-value">—</div><div class="kpi-note">Unique customer IDs</div></article>
+        <article class="kpi-card"><div class="kpi-head"><span>Avg. order value</span><span class="metric-symbol">◷</span></div><div class="kpi-value">—</div><div class="kpi-note">Average revenue per order</div></article>
+        <article class="kpi-card"><div class="kpi-head"><span>Customer rating</span><span class="metric-symbol">☆</span></div><div class="kpi-value">—</div><div class="kpi-note">Average available rating</div></article>
+      </div>
+    </section>
+
+    <section class="content-grid section-block" id="explore">
+      <article class="panel chart-panel">
+        <div class="panel-heading"><div><div class="eyebrow">VISUAL EXPLORATION</div><h2>Revenue breakdown</h2></div><div class="chart-controls"><label class="sr-only" for="chartColumn">Group by</label><select id="chartColumn"><option value="region">Region</option><option value="product_category">Product category</option><option value="sales_rep">Sales representative</option><option value="customer_segment">Customer segment</option><option value="sales_channel">Sales channel</option><option value="payment_method">Payment method</option><option value="source">Source</option></select><label class="sr-only" for="chartType">Chart type</label><select id="chartType"><option value="bar">Bar chart</option><option value="pie">Donut chart</option><option value="line">Line chart</option></select></div></div>
+        <div class="chart-wrap"><canvas id="revenueChart" aria-label="Revenue breakdown chart"></canvas><div class="empty-overlay" id="chartEmpty"><div class="empty-icon">▥</div><strong>Your chart will appear here</strong><span>Upload a dataset to explore your metrics.</span></div></div>
+      </article>
+      <article class="panel insights-panel"><div class="panel-heading"><div><div class="eyebrow">DATASET HEALTH</div><h2>Data summary</h2></div><span class="health-icon">✓</span></div><div class="health-body" id="healthBody"><div class="health-empty">Load a dataset to see its profile.</div></div><div class="health-foot"><span class="online-dot"></span> Your data stays in this workspace</div></article>
+    </section>
+
+    <section class="section-block" id="data-table-section">
+      <div class="section-heading"><div><div class="eyebrow">ROW-LEVEL DETAIL</div><h2>Data preview</h2></div><div class="table-actions"><span class="data-chip" id="rowCount">0 rows</span><select id="previewLimit" aria-label="Preview row count"><option value="25">25 rows</option><option value="50">50 rows</option><option value="100" selected>100 rows</option></select></div></div>
+      <div class="panel table-panel"><div class="table-scroll" id="tableContainer"><div class="table-empty"><div class="empty-icon">▤</div><strong>No dataset yet</strong><span>Load a CSV or Excel file to see a preview.</span></div></div></div>
+    </section>
+
+    <section class="section-block" id="ml">
+      <div class="section-heading"><div><div class="eyebrow">PREDICTIVE ANALYTICS</div><h2>Forecasts &amp; predictions</h2></div><span class="data-chip">Estimates, not guarantees</span></div>
+      <div class="content-grid prediction-grid">
+        <article class="panel prediction-card"><div class="prediction-card-head"><div class="prediction-icon">↗</div><div><h3>Sales forecast</h3><p>Next three months · linear trend</p></div></div><button class="button button-light" id="runForecast">Generate forecast</button><div class="prediction-output" id="forecastResult"><span class="output-placeholder">Forecasts need at least three months of sales history.</span></div></article>
+        <article class="panel prediction-card"><div class="prediction-card-head"><div class="prediction-icon risk-icon">!</div><div><h3>Customer churn risk</h3><p>Rank customers by order recency</p></div></div><button class="button button-light" id="runChurn">Score customers</button><div class="prediction-output" id="churnResult"><span class="output-placeholder">Uses a transparent recency heuristic, not a trained model.</span></div></article>
+        <article class="panel prediction-card"><div class="prediction-card-head"><div class="prediction-icon profit-icon">$</div><div><h3>Profit estimator</h3><p>Estimate from historical order data</p></div></div><div class="predict-inputs"><label>Quantity<input id="pQuantity" type="number" min="1" step="1" value="2"></label><label>Unit price<input id="pPrice" type="number" min="0" step="any" value="250"></label><label>Discount %<input id="pDiscount" type="number" min="0" max="100" step="any" value="10"></label></div><button class="button button-primary" id="predictProfit">Estimate profit</button><div class="prediction-output" id="profitResult"><span class="output-placeholder">Requires quantity, unit_price, discount_pct and profit fields.</span></div></article>
+      </div>
+    </section>
+
+    <section class="section-block upload-section" id="upload-panel">
+      <div class="section-heading"><div><div class="eyebrow">LOAD YOUR DATA</div><h2>Data sources</h2></div></div>
+      <div class="content-grid source-grid">
+        <article class="panel upload-panel"><div class="panel-heading"><div><h3>Upload files</h3><p>Combine CSV or Excel files for analysis.</p></div><div class="source-icon">⇧</div></div>
+          <label class="drop-zone" id="dropZone" for="fileInput"><span class="upload-glyph">↑</span><strong>Choose files or drag them here</strong><span>CSV, XLSX or XLS · Maximum 50 MB per request</span><input type="file" id="fileInput" multiple accept=".csv,.xlsx,.xls"></label>
+          <div class="upload-bottom"><label class="mode-label" for="uploadMode">When files are loaded</label><select id="uploadMode"><option value="append">Append to current dataset</option><option value="replace">Replace current dataset</option></select><button class="button button-primary" id="uploadButton">Load data</button></div><p class="form-status" id="uploadStatus" role="status"></p>
+        </article>
+        <article class="panel mysql-panel" id="mysqlPanel"><div class="panel-heading"><div><h3>MySQL connection</h3><p>Run a read-only SELECT on your configured database.</p></div><div class="source-icon mysql-icon">▣</div></div><div class="mysql-note">Configure connection credentials in your <code>.env</code> file before using this option. Credentials are never entered or stored in the browser.</div><label class="field-label" for="mysqlQuery">SQL query</label><textarea id="mysqlQuery" rows="3">SELECT * FROM mysql_orders</textarea><div class="mysql-footer"><span>Read-only queries only</span><button class="button button-primary" id="mysqlButton">Load from MySQL</button></div><p class="form-status" id="mysqlStatus" role="status"></p></article>
+      </div>
+      <div class="danger-zone"><div><strong>Clear current dataset</strong><span>Remove the loaded data from the local workspace.</span></div><button class="button button-danger" id="resetButton">Reset data</button></div>
+    </section>
+
+    <section class="section-block reports-section" id="reports"><div class="section-heading"><div><div class="eyebrow">TAKE YOUR INSIGHTS WITH YOU</div><h2>Export reports</h2></div></div><div class="report-row"><div class="report-copy"><div class="report-icon">⇩</div><div><strong>Download your analysis</strong><p>Export the filtered data or a PDF with KPI summaries and embedded charts.</p></div></div><div class="report-buttons"><a class="button button-light export-link" aria-disabled="true" href="/export/csv">Download CSV</a><a class="button button-light export-link" aria-disabled="true" href="/export/excel">Download Excel</a><a class="button button-primary export-link" aria-disabled="true" href="/export/pdf">Download PDF report</a></div></div></section>
+
+    {% if current_user.role == 'admin' %}<section class="section-block admin-section" id="admin"><div class="section-heading"><div><div class="eyebrow">ACCESS CONTROL</div><h2>Workspace users</h2></div><span class="data-chip">Administrator</span></div><div class="panel"><p class="admin-intro">Only administrators can change roles. At least one administrator must remain.</p><div class="table-scroll" id="adminUsers"><div class="table-empty"><strong>Loading user directory…</strong></div></div></div></section>{% endif %}
+    <footer><span>Data Studio</span><span>Local-first analytics · Flask + pandas</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='js/filters.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/ml.js') }}" defer></script>
+  {% if current_user.role == 'admin' %}<script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>{% endif %}
+</body>
+</html>

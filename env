@@ -1,0 +1,8 @@
+MYSQL_ROOT_PASSWORD=non
+MYSQL_USER=analytics
+MYSQL_PASSWORD=non
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_APP_DB=ds_webapp
+MYSQL_SOURCE_DB=company_sources_practice
+SECRET_KEY=super-secret-key
